@@ -1,0 +1,12 @@
+numba
+easyocr
+numpy
+opencv-python
+Pillow
+requests
+six
+pyYaml
+flask
+
+
+

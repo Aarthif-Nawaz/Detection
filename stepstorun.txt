@@ -1,0 +1,20 @@
+1) download python
+2) Go to the cmd and run the command
+    pip install -r requirements.txt
+3) download anaconda
+    run the following commands
+    1.conda create -n env_easyocr python==3.6.5
+    2.activate env_easyocr
+    3.conda install pytorch torchvision cpuonly -c pytorch
+    4.conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
+    5.pip install -r requirements.txt
+    6.pip install easyocr
+    7.pip install PyYAML
+    8.pip install numba
+4) Give the complete folder path name where the images are there -> eg :-C:\Users\Aarthif\Desktop\Images
+5) Run the python code by running in terminal
+python main.py
+
+
+
+
