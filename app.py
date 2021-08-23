@@ -1,3 +1,5 @@
+import string
+
 from flask import Flask, request, jsonify
 import os
 import cv2
@@ -20,7 +22,7 @@ def readData():
         try:
             filename_data = request.files['passport']
         except:
-            return jsonify({'Result': 'Please Provide Passport as a key and the Image as Value !'})
+            return jsonify({'Result': 'Please Provide Passport as a key and the Image as Value !', 'Error_Code': 4})
         shutil.rmtree('Passport')
         os.mkdir('Passport')
         filename_data.save(os.path.join(os.getcwd(), f'Passport/{filename_data.filename}'))
@@ -34,13 +36,11 @@ def readData():
                     if passport[0] == "P":
                         name = passport[-3:]
                         name = ' '.join([str(elem) for elem in name])
+                        name = name.translate(str.maketrans('', '', string.punctuation))
                         country = passport[1][0:3]
                         if name.__contains__(country):
                             name = name.replace(country, '')
-                        return jsonify({
-                            'Name': name,
-                            'Country': country
-                        })
+                        return jsonify({'Name': name,'Country': country, 'Error_Code': 0})
             image = cv2.imread(os.path.join(os.getcwd(), f'Passport/{filename_data.filename}'))
             rotated = imutils.rotate_bound(image, 270)
             reader = easyocr.Reader(['en'], gpu=True)
@@ -52,22 +52,23 @@ def readData():
                     if passport[0] == "P":
                         name = passport[-3:]
                         name = ' '.join([str(elem) for elem in name])
+                        name = name.translate(str.maketrans('', '', string.punctuation))
                         country = passport[1][0:3]
                         if name.__contains__(country):
                             name = name.replace(country, '')
                         return jsonify(
                             {
                                 'Name': name,
-                                'Country': country
+                                'Country': country, 'Error_Code': 0
                             }
                         )
-            return jsonify({'Result': 'Please Provide A Clear Image Of Passport'})
+            return jsonify({'Result': 'Please Provide A Clear Image Of Passport', 'Error_Code': 1})
         except Exception as e:
             print(e)
-            return jsonify({'Result': 'An Error Occurred'})
+            return jsonify({'Result': 'An Error Occurred', 'Error_Code': 2})
 
     else:
-        return jsonify({'Result': 'Please Provide an Image Of Passport'})
+        return jsonify({'Result': 'Please Provide an Image Of Passport', 'Error_Code': 3})
 
 
 if __name__ == "__main__":
